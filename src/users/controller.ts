@@ -6,14 +6,14 @@ import { CreateUserData, User, Users } from "./users.ts";
 import { IncomingMessage, ServerResponse } from "node:http";
 
 export class Controller {
-  #userRepo: Users;
+  userRepo: Users;
 
   constructor(users: User[] = []) {
-    this.#userRepo = new Users(users);
+    this.userRepo = new Users(users);
   }
 
   async getUsers(_: IncomingMessage, response: ServerResponse) {
-    const result = this.#userRepo.getUsers();
+    const result = this.userRepo.getUsers();
     return response
       .writeHead(result.responseStatus)
       .end(JSON.stringify(result.users));
@@ -34,7 +34,7 @@ export class Controller {
         .end(JSON.stringify({ error: bodyErrors }));
     }
 
-    const result = this.#userRepo.createUser(body);
+    const result = this.userRepo.createUser(body);
     return response
       .writeHead(result.responseStatus)
       .end(JSON.stringify(result.user));
@@ -48,7 +48,7 @@ export class Controller {
         .writeHead(ResponseStatusCodes.BAD_REQUEST)
         .end(JSON.stringify({ error }));
     }
-    const result = this.#userRepo.getUser(userId);
+    const result = this.userRepo.getUser(userId);
     if (result.responseStatus === ResponseStatusCodes.NOT_FOUND) {
       return response
         .writeHead(result.responseStatus)
@@ -69,7 +69,7 @@ export class Controller {
         .writeHead(ResponseStatusCodes.BAD_REQUEST)
         .end(JSON.stringify({ error }));
     }
-    const result = this.#userRepo.deleteUser(userId);
+    const result = this.userRepo.deleteUser(userId);
     if (result.responseStatus === ResponseStatusCodes.NOT_FOUND) {
       return response
         .writeHead(result.responseStatus)
@@ -103,7 +103,7 @@ export class Controller {
         .end(JSON.stringify({ error: bodyErrors }));
     }
 
-    const result = this.#userRepo.updateUser(userId, body);
+    const result = this.userRepo.updateUser(userId, body);
     if (result.responseStatus === ResponseStatusCodes.NOT_FOUND) {
       return response
         .writeHead(result.responseStatus)

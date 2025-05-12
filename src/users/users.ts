@@ -15,20 +15,20 @@ export type CreateUserData = {
 };
 
 export class Users {
-  #users: User[] = [];
+  users: User[] = [];
   constructor(users: User[] = []) {
-    this.#users = users;
+    this.users = users;
   }
 
   getUsers() {
     return {
       responseStatus: ResponseStatusCodes.OK,
-      users: this.#users,
+      users: this.users,
     };
   }
 
   getUser(id: string) {
-    const user = this.#users.find((user) => user.id === id);
+    const user = this.users.find((user) => user.id === id);
     if (!user) {
       return {
         responseStatus: ResponseStatusCodes.NOT_FOUND,
@@ -47,7 +47,7 @@ export class Users {
       id: uuidv4(),
     };
 
-    this.#users.push(createdUser);
+    this.users.push(createdUser);
     return {
       responseStatus: ResponseStatusCodes.CREATED,
       user: createdUser,
@@ -55,20 +55,20 @@ export class Users {
   }
 
   deleteUser(id: string) {
-    const userIndex = this.#users.findIndex((user) => user.id === id);
+    const userIndex = this.users.findIndex((user) => user.id === id);
     if (userIndex === -1) {
       return {
         responseStatus: ResponseStatusCodes.NOT_FOUND,
       };
     }
-    this.#users.splice(userIndex, 1);
+    this.users.splice(userIndex, 1);
     return {
       responseStatus: ResponseStatusCodes.NO_CONTENT,
     };
   }
 
   updateUser(id: string, newData: CreateUserData) {
-    const userIndex = this.#users.findIndex((user) => user.id === id);
+    const userIndex = this.users.findIndex((user) => user.id === id);
     if (userIndex === -1) {
       return {
         responseStatus: ResponseStatusCodes.NOT_FOUND,
@@ -79,7 +79,7 @@ export class Users {
       id,
       ...newData,
     };
-    this.#users[userIndex] = updatedUser;
+    this.users[userIndex] = updatedUser;
     return {
       responseStatus: ResponseStatusCodes.OK,
       user: updatedUser,
